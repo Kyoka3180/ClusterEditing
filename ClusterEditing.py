@@ -3,6 +3,7 @@ import itertools
 import datetime
 from graphviz import Graph
 import os
+import time
 #test用
 import random
 
@@ -52,8 +53,11 @@ class CE:
         renderGraph(self.V,self.E,self.OutputPath+"/GraphBeforeCE")
         #書き込み用ファイルの作成
         self.file=open(self.OutputPath+"/Output.txt",mode="w")
+        self.file.write("N : "+str(self.N)+"\nM : "+str(self.M)+"\n")
+        startTime=time.time() #処理時間の計測
         #部分集合のサイズが小さい順に最小コストを計算
         for length in range(1,self.N+1):
+            print("length time: "+str(time.time()-startTime))
             for s in range(2**self.N):
                 if s.bit_count()!=length:
                     continue
@@ -74,6 +78,7 @@ class CE:
                     if tmpE[v1][v2]!=self.E[v1][v2]:
                         CEcost+=1
             self.file.write("CEcose : "+str(CEcost)+"\n")
+        self.file.write("time : "+str(time.time()-startTime)+"\n")
         self.file.close()
 
     def calMinimumCost(self,s):#sはVの部分集合
